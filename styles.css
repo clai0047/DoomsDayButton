@@ -48,10 +48,16 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-                    /* --- STEP 1: Default Warning --- */
+                   /********** --- STEP 1: Default Warning --- ***************/
 /* Create a large, round red button that pulses endlessly to indicate danger */
 /*creating increase of size and animation "slow pulse" with infinite ease in and out. This makes it repeat on a loop*/
 
+.container {
+  display: flex;
+  justify-content: center; /* Centers horizontally (left to right) */
+  align-items: center; /* Centers vertically (top to bottom) */
+  height: 100vh; /* Forces screen to take up full height */
+}
 .doomsday {
   width: 150px;
   height: 150px;
@@ -59,6 +65,9 @@ table {
   background-color: #990000;
   color: white;
   animation: slowPulse 2s infinite ease-in-out; /* Repeats forever */
+  display: flex;
+  justify-content: center;  /* Centers horizontally (left to right) */
+  align-items: center; /* Centers vertically (top to bottom) */
 }
 
 /* Definition for the slow pulse animation, recommended animation from ai */
@@ -68,7 +77,7 @@ table {
   50% { transform: scale(1.05); background-color: #ff1a1a; } /* Grows & turns brighter red */
 }
 
-                    /* --- STEP 2: Hover Warning --- */
+                    /********** --- STEP 2: Hover Warning --- **********/
 
 /* When the mouse is hovering over the button, change to a fast, panicking shake. 
 This will override previous animation when hovered over*/
@@ -89,7 +98,7 @@ recommended transform after breaking down project with ai*/
 }
 
 
-                    /* --- STEP 3: Press Warning --- */
+                    /********** --- STEP 3: Press Warning --- **********/
 
 /* When the user clicks and holds the button, make it vibrate at maximum speed. chose from multiple 
 suggestions from ai*/ 
@@ -110,32 +119,33 @@ suggestions from ai*/
   /* Pushed down and right */
 }
 
-                /* --- STEP 4: Extra Challenge (Long-Press Detonation) --- */
+                    /********** --- STEP 4: Extra Challenge (Long-Press Detonation) --- **********/
 
 /* This screen covers the entire browser window
  but is completely hidden by default */
 
-/*--.explosion-screen {
+.explosion-screen {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   background-color: #ff1a1a;
   display: none; /* Keeps it hidden out of sight(display:none) */
-/*-}-*/
+}
 
 /* If the button is clicked (:active), look for the screen element next to it (+) */
 
-/*.doomsday:active + .explosion-screen {
+.doomsday:active + .explosion-screen {
   display: flex; /* Reveal the screen */
   animation: triggerDoom 0.1s forwards;
   animation-delay: 3s; /* Delay acts as a 3-second countdown timer. Releasing click resets it! */
-/*-}-*/
+}
 
-/* Definition to smoothly bring the explosion text onto view 
-@keyframes triggerDoom {
+/* Definition to smoothly bring the explosion text onto view */
+@keyframes triggerDoom{ }
   from { opacity: 0; }
-  to { opacity: 1; }--*/
- /*} --*/
+  to { opacity: 1; 
+ } 
+
 
 
 /* --- STEP 4 FIX: Extra Challenge (3-Second Detonation) --- */
@@ -178,4 +188,32 @@ suggestions from ai*/
 /* 3. The keyframe rule that forces opacity to 1 at the end of the delay */
 @keyframes triggerDoom {
   to { opacity: 1; }
+}
+
+/* inquired through ai how to make the text appear as if it is being typed out, 
+with a blinking cursor at the end of the text. adding suspenseful feel  */
+h1 {
+  font-family: monospace;
+  overflow: hidden; /* Ensures the text stays hidden until typed */
+  border-right: .15em solid orange; /* The blinking cursor */
+  white-space: nowrap; /* Keeps the text on a single line */
+  margin: 0 auto; 
+  letter-spacing: .15em; 
+  
+  /* Animates the typing movement and the cursor blink */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* The typing effect typing out the characters */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The blinking cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #ff3300; }
 }
