@@ -115,3 +115,71 @@ table {
   50% { transform: scale(1.05); background-color: #ff1a1a; } /* Grows & turns brighter red */
 }
 
+                    /* --- STEP 2: Hover Warning --- */
+
+/* When the mouse is hovering over the button, change to a fast, panicking shake. 
+This will override previous animation when hovered over*/
+
+.doomsday:hover {
+  animation: fastShake 0.2s infinite linear; /* Overrides the slow pulse, causing a forever loop of new animation*/
+}
+
+/* Definition for the aggressive hover shaking, 
+recommended transform after breaking down project with ai*/
+
+@keyframes fastShake {
+  0%, 100% { transform: scale(1.1) translate(0, 0); }
+  
+  25% { transform: scale(1.1) translate(-2px, 2px); } /* Shifts down and left */
+  
+  75% { transform: scale(1.1) translate(2px, -2px); }  /* Shifts up and right */
+}
+
+
+                    /* --- STEP 3: Press Warning --- */
+
+/* When the user clicks and holds the button, make it vibrate at maximum speed. chose from multiple 
+suggestions from ai*/ 
+
+.doomsday:active {
+  background-color: #ff0000;
+  animation: panicVibrate 0.05s infinite alternate;
+  
+  /* 'alternate' causes rapid back-and-forth bouncing */
+}
+
+/* Definition for the ultra-fast vibration */
+
+@keyframes panicVibrate {
+  0% { transform: translateY(5px) translateX(-3px); }  
+  /* Pushed down and left */
+  100% { transform: translateY(5px) translateX(3px); } 
+  /* Pushed down and right */
+}
+
+                /* --- STEP 4: Extra Challenge (Long-Press Detonation) --- */
+
+/* This screen covers the entire browser window
+ but is completely hidden by default */
+
+.explosion-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: #ff1a1a;
+  display: none; /* Keeps it hidden out of sight(display:none) */
+}
+
+/* If the button is clicked (:active), look for the screen element next to it (+) */
+
+.doomsday:active + .explosion-screen {
+  display: flex; /* Reveal the screen */
+  animation: triggerDoom 0.1s forwards;
+  animation-delay: 3s; /* Delay acts as a 3-second countdown timer. Releasing click resets it! */
+}
+
+/* Definition to smoothly bring the explosion text onto view */
+@keyframes triggerDoom {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
