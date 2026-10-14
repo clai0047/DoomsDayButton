@@ -61,30 +61,14 @@ table {
 .doomsday {
   width: 150px;
   height: 150px;
-  position: relative;
   border-radius: 50%;
   background-color: #990000;
   color: white;
+  touch-action: none;
   animation: slowPulse 2s infinite ease-in-out; /* Repeats forever */
   display: flex;
   justify-content: center;  /* Centers horizontally (left to right) */
   align-items: center; /* Centers vertically (top to bottom) */
-}
-
-.countdown {
-  display: none;
-  pointer-events: none;
-}
-
-.countdown.is-counting {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 5rem;
-  font-weight: bold;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* Definition for the slow pulse animation, recommended animation from ai */

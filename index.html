@@ -9,7 +9,6 @@
     <main class="container">
         <button class="doomsday">
             <div class="instructions">ATTENTION!!!<br> When you press the doomsday button, you will be taken out of the matrix!</div>
-            <span class="countdown" aria-live="polite" aria-atomic="true"></span>
         </button>
     </main>
     <div class="explosion-screen" aria-live="assertive" aria-hidden="true">
@@ -19,23 +18,10 @@
     <script>
         const doomsdayButton = document.querySelector('.doomsday');
         const instructions = document.querySelector('.instructions');
-        const countdown = document.querySelector('.countdown');
         const explosionScreen = document.querySelector('.explosion-screen');
-        let activationTimeout;
-        let countdownInterval;
+        let holdTimeout;
         let activePointerId = null;
         let hasDetonated = false;
-        const holdDuration = 3000;
-
-        function cancelActivation() {
-            clearTimeout(activationTimeout);
-            clearInterval(countdownInterval);
-            activationTimeout = undefined;
-            countdownInterval = undefined;
-            activePointerId = null;
-            countdown.classList.remove('is-counting');
-            countdown.textContent = '';
-        }
 
         doomsdayButton.addEventListener('mouseenter', () => {
             instructions.style.opacity = '1';
@@ -50,39 +36,34 @@
                 return;
             }
 
-            cancelActivation();
+            clearTimeout(holdTimeout);
             activePointerId = event.pointerId;
-            const detonationTime = Date.now() + holdDuration;
-            countdown.classList.add('is-counting');
-            countdown.textContent = '3';
-            countdownInterval = window.setInterval(() => {
-                const secondsLeft = Math.ceil((detonationTime - Date.now()) / 1000);
-                countdown.textContent = String(Math.max(secondsLeft, 1));
-            }, 100);
-            activationTimeout = window.setTimeout(() => {
-                clearInterval(countdownInterval);
-                countdownInterval = undefined;
-                countdown.classList.remove('is-counting');
-                countdown.textContent = '';
+            doomsdayButton.setPointerCapture(event.pointerId);
+            holdTimeout = window.setTimeout(() => {
                 hasDetonated = true;
+                activePointerId = null;
                 explosionScreen.classList.add('is-visible');
                 explosionScreen.setAttribute('aria-hidden', 'false');
-            }, holdDuration);
+            }, 3000);
         });
 
-        window.addEventListener('pointerup', (event) => {
-            if (event.pointerId === activePointerId) {
-                cancelActivation();
+        function cancelHold(event) {
+            if (event.pointerId !== activePointerId) {
+                return;
             }
-        });
 
-        window.addEventListener('pointercancel', (event) => {
-            if (event.pointerId === activePointerId) {
-                cancelActivation();
-            }
-        });
+            clearTimeout(holdTimeout);
+            holdTimeout = undefined;
+            activePointerId = null;
+        }
 
-        window.addEventListener('blur', cancelActivation);
+        window.addEventListener('pointerup', cancelHold);
+        window.addEventListener('pointercancel', cancelHold);
+        window.addEventListener('blur', () => {
+            clearTimeout(holdTimeout);
+            holdTimeout = undefined;
+            activePointerId = null;
+        });
     </script>
 </body>
 </html>
