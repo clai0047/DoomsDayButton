@@ -9,6 +9,7 @@
     <main class="container">
         <button class="doomsday">
             <div class="instructions">ATTENTION!!!<br> When you press the doomsday button, you will be taken out of the matrix!</div>
+            <span class="countdown" aria-live="polite" aria-atomic="true"></span>
         </button>
     </main>
     <div class="explosion-screen" aria-live="assertive" aria-hidden="true">
@@ -18,15 +19,22 @@
     <script>
         const doomsdayButton = document.querySelector('.doomsday');
         const instructions = document.querySelector('.instructions');
+        const countdown = document.querySelector('.countdown');
         const explosionScreen = document.querySelector('.explosion-screen');
         let activationTimeout;
+        let countdownInterval;
         let activePointerId = null;
         let hasDetonated = false;
+        const holdDuration = 3000;
 
         function cancelActivation() {
             clearTimeout(activationTimeout);
+            clearInterval(countdownInterval);
             activationTimeout = undefined;
+            countdownInterval = undefined;
             activePointerId = null;
+            countdown.classList.remove('is-counting');
+            countdown.textContent = '';
         }
 
         doomsdayButton.addEventListener('mouseenter', () => {
@@ -44,11 +52,22 @@
 
             cancelActivation();
             activePointerId = event.pointerId;
+            const detonationTime = Date.now() + holdDuration;
+            countdown.classList.add('is-counting');
+            countdown.textContent = '3';
+            countdownInterval = window.setInterval(() => {
+                const secondsLeft = Math.ceil((detonationTime - Date.now()) / 1000);
+                countdown.textContent = String(Math.max(secondsLeft, 1));
+            }, 100);
             activationTimeout = window.setTimeout(() => {
+                clearInterval(countdownInterval);
+                countdownInterval = undefined;
+                countdown.classList.remove('is-counting');
+                countdown.textContent = '';
                 hasDetonated = true;
                 explosionScreen.classList.add('is-visible');
                 explosionScreen.setAttribute('aria-hidden', 'false');
-            }, 3000);
+            }, holdDuration);
         });
 
         window.addEventListener('pointerup', (event) => {
