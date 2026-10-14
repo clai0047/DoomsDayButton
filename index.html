@@ -11,13 +11,23 @@
             <div class="instructions">ATTENTION!!!<br> When you press the doomsday button, you will be taken out of the matrix!</div>
         </button>
     </main>
-    <div class="result"></div>
+    <div class="explosion-screen" aria-live="assertive" aria-hidden="true">
+        <span>BOOM</span>
+    </div>
 
     <script>
         const doomsdayButton = document.querySelector('.doomsday');
         const instructions = document.querySelector('.instructions');
-        const result = document.querySelector('.result');
+        const explosionScreen = document.querySelector('.explosion-screen');
         let activationTimeout;
+        let activePointerId = null;
+        let hasDetonated = false;
+
+        function cancelActivation() {
+            clearTimeout(activationTimeout);
+            activationTimeout = undefined;
+            activePointerId = null;
+        }
 
         doomsdayButton.addEventListener('mouseenter', () => {
             instructions.style.opacity = '1';
@@ -27,9 +37,33 @@
             instructions.style.opacity = '0';
         });
 
-        doomsdayButton.addEventListener('mouseup', () => {
-            clearTimeout(activationTimeout);
+        doomsdayButton.addEventListener('pointerdown', (event) => {
+            if (event.button !== 0 || hasDetonated) {
+                return;
+            }
+
+            cancelActivation();
+            activePointerId = event.pointerId;
+            activationTimeout = window.setTimeout(() => {
+                hasDetonated = true;
+                explosionScreen.classList.add('is-visible');
+                explosionScreen.setAttribute('aria-hidden', 'false');
+            }, 3000);
         });
+
+        window.addEventListener('pointerup', (event) => {
+            if (event.pointerId === activePointerId) {
+                cancelActivation();
+            }
+        });
+
+        window.addEventListener('pointercancel', (event) => {
+            if (event.pointerId === activePointerId) {
+                cancelActivation();
+            }
+        });
+
+        window.addEventListener('blur', cancelActivation);
     </script>
 </body>
 </html>

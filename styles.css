@@ -119,75 +119,27 @@ suggestions from ai*/
   /* Pushed down and right */
 }
 
-                    /********** --- STEP 4: Extra Challenge (Long-Press Detonation) --- **********/
-
-/* This screen covers the entire browser window
- but is completely hidden by default */
-
 .explosion-screen {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: #ff1a1a;
-  display: none; /* Keeps it hidden out of sight(display:none) */
-}
-
-/* If the button is clicked (:active), look for the screen element next to it (+) */
-
-.doomsday:active + .explosion-screen {
-  display: flex; /* Reveal the screen */
-  animation: triggerDoom 0.1s forwards;
-  animation-delay: 3s; /* Delay acts as a 3-second countdown timer. Releasing click resets it! */
-}
-
-/* Definition to smoothly bring the explosion text onto view */
-@keyframes triggerDoom{ }
-  from { opacity: 0; }
-  to { opacity: 1; 
- } 
-
-
-
-/* --- STEP 4 FIX: Extra Challenge (3-Second Detonation) --- */
-
-/* 1. Set up the hidden explosion screen safely */
-.explosion-screen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #ff1a1a;
   color: white;
   font-size: 3rem;
   font-weight: bold;
-  display: flex; /* Kept flex active so layout works */
-  justify-content: center;
-  align-items: center;
-  
-  /* BEGINNER TRICK: Make it completely transparent and unclickable */
   opacity: 0;
-  visibility: hidden; 
-  pointer-events: none; 
-  
-  /* Smoothly transition when it gets triggered */
+  visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.2s ease;
 }
 
-/* 2. When the button is clicked and HELD DOWN (:active) */
-.doomsday:active + .explosion-screen {
-  /* Instantly make it interactable when the timer finishes */
+.explosion-screen.is-visible {
+  opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  
-  /* Fire the keyframe animation */
-  animation: triggerDoom 0.1s forwards;
-  
-  /* The Countdown Timer: Must hold left-click for 3 full seconds */
-  animation-delay: 3s; 
-}
-
-/* 3. The keyframe rule that forces opacity to 1 at the end of the delay */
-@keyframes triggerDoom {
-  to { opacity: 1; }
 }
 
 /* inquired through ai how to make the text appear as if it is being typed out, 
