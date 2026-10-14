@@ -82,8 +82,9 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3.5rem;
+  font-size: 5rem;
   font-weight: bold;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* Definition for the slow pulse animation, recommended animation from ai */
@@ -156,6 +157,16 @@ suggestions from ai*/
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+}
+
+.explosion-screen.is-visible span {
+  animation: boomPop 0.6s ease-out both;
+}
+
+@keyframes boomPop {
+  0% { opacity: 0; transform: scale(0.2); }
+  65% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 /* inquired through ai how to make the text appear as if it is being typed out, 
