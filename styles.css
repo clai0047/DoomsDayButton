@@ -95,3 +95,23 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+                    /* --- STEP 1: Default Warning --- */
+/* Create a large, round red button that pulses endlessly to indicate danger */
+/*creating increase of size and animation "slow pulse" with infinite ease in and out. This makes it repeat on a loop*/
+
+.doomsday {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #990000;
+  color: white;
+  animation: slowPulse 2s infinite ease-in-out; /* Repeats forever */
+}
+
+/* Definition for the slow pulse animation, recommended animation from ai */
+
+@keyframes slowPulse {
+  0%, 100% { transform: scale(1); background-color: #990000; }
+  50% { transform: scale(1.05); background-color: #ff1a1a; } /* Grows & turns brighter red */
+}
+
